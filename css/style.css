@@ -1,0 +1,263 @@
+/* Basic styles for the game */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* To stack header, then game content */
+    align-items: center; /* Center game content horizontally */
+    font-family: Arial, sans-serif;
+    direction: rtl; /* Set text direction to right-to-left */
+    background-color: #f0f0f0; /* Added a light background to body */
+}
+
+header {
+    display: flex;
+    justify-content: space-around; /* Distributes items along the main axis */
+    align-items: center; /* Vertically center items in the header */
+    width: 100%;
+    padding: 10px 0; /* Added vertical padding, horizontal will be handled by space-around */
+    background-color: #d8bfd8; /* Light purple, as a placeholder */
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box; /* Ensure padding doesn't add to width */
+}
+
+header div, header button {
+    margin: 0 10px; /* Provides some spacing if space-around isn't enough */
+    padding: 5px 10px; /* Padding inside each header item */
+    background-color: #e9e9e9; /* Slight background for items */
+    border-radius: 5px; /* Rounded corners for items */
+}
+
+.game-container {
+    display: flex;
+    /* flex-direction: row; is default, which is what we want */
+    /* For RTL, first item (panel) will be on the right, second (game-area) on the left */
+    margin-top: 20px;
+    width: 95%; /* Make the game container take most of the width */
+    max-width: 1024px; /* Max width for the whole game setup */
+    justify-content: center; /* Center items if they don't fill the space */
+}
+
+#protector-panel {
+    width: 200px; /* Fixed width for the panel */
+    /* height: 600px; Remove fixed height, let content or flex define it */
+    max-height: 600px; /* Match game area max height */
+    padding: 15px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; /* If many protectors, allow scrolling */
+    box-sizing: border-box;
+}
+
+#protector-panel h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.protector-option {
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    cursor: pointer;
+    text-align: center;
+    width: 90%; /* Relative to panel width */
+    box-sizing: border-box;
+    border-radius: 5px; /* Slightly rounded */
+    transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.protector-option:hover {
+    background-color: #e7e7e7;
+}
+
+#game-area {
+    /* flex-grow: 1; Allow game area to take remaining space if panel has fixed width */
+    /* Instead of flex-grow, let's use defined widths first as per prompt */
+    width: calc(100% - 220px); /* Calculate width relative to panel + margin */
+    max-width: 800px; /* Max width for game area */
+    height: 70vh; /* Use viewport height */
+    max-height: 600px; /* Max height for game area */
+    border: 2px solid black;
+    margin-right: 20px; /* Space between panel and game-area */
+    background-color: #e0e0e0; /* Placeholder color */
+    box-sizing: border-box;
+}
+
+#game-board {
+    width: 100%;
+    height: 100%;
+    background-color: #eee; /* Slightly different for visibility */
+    display: grid; /* For later grid layout of towers */
+    /* Example grid columns, can be adjusted in JS */
+    /* grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); */
+    border: 1px solid #333; /* Ensure border is visible */
+    position: relative; /* For absolute positioning of monsters */
+}
+
+.grid-cell {
+    border: 1px dotted #999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px; /* For debugging cell coordinates */
+    /* Default background, can be overridden by protector class */
+    background-color: #fdfdfd;
+}
+
+.grid-cell.protector-regular_falafel { /* Example class for a placed protector */
+    background-color: lightgreen;
+}
+.grid-cell.protector-spicy_falafel {
+    background-color: lightcoral;
+}
+.grid-cell.protector-tahini_tower {
+    background-color: lightgoldenrodyellow;
+}
+.grid-cell.protector-spicy_falafel {
+    /* background-color is set by JS using stats.color ('orangered') */
+    /* textContent is set by JS to '🌶️' */
+    font-weight: bold;
+}
+.grid-cell.protector-regular_falafel {
+    /* background-color is set by JS using stats.color ('lightgreen') */
+    /* อาจจะเพิ่ม inner border หรือ subtle pattern */
+}
+
+
+.monster {
+    position: absolute;
+    /* Default size for basic_glob */
+    width: 30px;
+    height: 30px;
+    background-color: purple; /* Fallback/default color */
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%; /* Default to circle for basic_glob */
+    z-index: 5; /* Base z-index for monsters */
+    transition: left 0.1s linear, top 0.1s linear;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Specific monster type styling */
+.monster.fast_pita {
+    width: 40px; /* wider */
+    height: 25px; /* flatter */
+    border-radius: 40% / 50%; /* elliptical */
+    /* background-color is set by JS using stats.color ('sandybrown') */
+}
+/* .monster.basic_glob will use the default .monster styles for shape/size */
+
+
+.monster-health-bar-container {
+    width: 80%;
+    height: 5px;
+    background-color: #555; /* Dark background for the bar */
+    border: 1px solid #333;
+    border-radius: 2px;
+    overflow: hidden; /* To make inner bar conform to border-radius */
+    margin-bottom: 2px; /* Space from monster bottom */
+}
+
+.monster-health-bar {
+    width: 100%; /* Full health */
+    height: 100%;
+    background-color: red; /* Health color */
+    transition: width 0.1s linear; /* Smooth health change */
+}
+
+/* Game Message Overlay */
+#game-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 3em;
+    text-align: center;
+    z-index: 100; /* Above everything else */
+    /* Initially hidden by inline style display:none, JS will toggle */
+}
+
+/* Styles for selected protector option */
+.protector-option.selected {
+    border-color: #007bff; /* Blue border */
+    box-shadow: 0 0 5px rgba(0,123,255,.5);
+}
+
+/* Responsive adjustments (example) */
+@media (max-width: 768px) {
+    #game-message {
+        font-size: 2em; /* Smaller font for messages on small screens */
+    }
+
+    .game-container {
+        flex-direction: column-reverse; /* Stack panel below game area on small screens */
+        align-items: center;
+    }
+
+    #game-area {
+        width: 90vw; /* Full width on smaller screens */
+        max-width: none; /* Override desktop max-width */
+        margin-right: 0; /* No margin when stacked */
+        margin-bottom: 20px; /* Space between game area and panel */
+        height: 60vh; /* Adjust height */
+    }
+
+    #protector-panel {
+        width: 90vw;
+        max-width: none; /* Override desktop max-width */
+        height: auto; /* Adjust height */
+        max-height: 200px; /* Limit height for panel when stacked */
+    }
+
+    header {
+        flex-direction: column;
+        align-items: stretch; /* Make header items take full width */
+    }
+    header div, header button {
+        margin: 5px 0; /* Adjust margin for stacked header items */
+        text-align: center;
+    }
+}
+
+.projectile {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 6; /* Above monsters (z-index 5), below impact effects */
+    /* background-color is set by JS */
+}
+
+.projectile.splash-projectile {
+    /* background-color is orangered by default from spicy_falafel stats.color */
+    /* Can add specific overrides here if needed, e.g. a border */
+    /* border: 1px solid darkred; */
+}
+
+.impact-effect {
+    position: absolute;
+    width: 15px; /* Initial size, might be controlled by JS if varies */
+    height: 15px;
+    /* background-color is set by JS (can be projectile color or fixed yellow) */
+    border-radius: 50%;
+    transform: scale(1); /* Initial scale before animation */
+    opacity: 0.8; /* Initial opacity before fade */
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+    z-index: 15; /* Above projectiles and monsters */
+    pointer-events: none; /* So it doesn't interfere with clicks */
+}

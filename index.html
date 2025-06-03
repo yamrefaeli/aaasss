@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מגיני הפלאפל נגד מפלצות החומוס</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div id="coins-display">מטבעות: 0</div>
+        <div id="wave-display">גל: 1</div>
+        <div id="base-health-display">חיים: 100</div>
+        <button id="pause-button">השהה</button>
+    </header>
+
+    <div class="game-container">
+        <aside id="protector-panel">
+            <h2>בחר מגן</h2>
+            <div class="protector-option" data-type="regular_falafel">כדור פלאפל רגיל</div>
+            <div class="protector-option" data-type="spicy_falafel">פלאפל חריף</div> <!-- Will be updated by JS -->
+            <div class="protector-option" data-type="tahini_tower">מגדל טחינה</div>
+        </aside>
+        <main id="game-area">
+            <div id="game-board">
+                <!-- Game board content will be generated here -->
+            </div>
+        </main>
+    </div>
+    <div id="game-message" style="display: none;"></div>
+
+    <script src="js/game.js" defer></script>
+</body>
+</html>
