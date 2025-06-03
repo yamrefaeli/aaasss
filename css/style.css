@@ -89,89 +89,78 @@ header div, header button {
 }
 
 #game-board {
-    width: 100%;
-    height: 100%;
-    background-color: #eee; /* Slightly different for visibility */
-    display: grid; /* For later grid layout of towers */
-    /* Example grid columns, can be adjusted in JS */
-    /* grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); */
-    border: 1px solid #333; /* Ensure border is visible */
-    position: relative; /* For absolute positioning of monsters */
+    /* width and height set by JS */
+    display: grid;
+    border: 1px solid #333; /* Keep border for game area */
+    position: relative;
+    background-image: url('../assets/images/game_board_background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .grid-cell {
-    border: 1px dotted #999;
+    border: 1px dotted rgba(204, 204, 204, 0.3); /* Subtle grid lines */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 10px; /* For debugging cell coordinates */
-    /* Default background, can be overridden by protector class */
-    background-color: #fdfdfd;
+    /* background-color: transparent; /* Cells are transparent over board background */
 }
 
-.grid-cell.protector-regular_falafel { /* Example class for a placed protector */
-    background-color: lightgreen;
-}
-.grid-cell.protector-spicy_falafel {
-    background-color: lightcoral;
-}
-.grid-cell.protector-tahini_tower {
-    background-color: lightgoldenrodyellow;
-}
-.grid-cell.protector-spicy_falafel {
-    /* background-color is set by JS using stats.color ('orangered') */
-    /* textContent is set by JS to '🌶️' */
-    font-weight: bold;
-}
-.grid-cell.protector-regular_falafel {
-    /* background-color is set by JS using stats.color ('lightgreen') */
-    /* อาจจะเพิ่ม inner border หรือ subtle pattern */
-}
+/* Remove old protector cell styling based on classes and direct color */
+/* .grid-cell.protector-regular_falafel { ... } */
+/* .grid-cell.protector-spicy_falafel { ... } */
+/* .grid-cell.protector-tahini_tower { ... } */
+/* JS will no longer set direct background color on cells for protectors */
 
+.protector-image {
+    max-width: 95%; /* Slightly smaller than cell to show grid lines */
+    max-height: 95%;
+    object-fit: contain;
+    display: block; /* remove extra space under img */
+}
 
 .monster {
     position: absolute;
-    /* Default size for basic_glob */
-    width: 30px;
-    height: 30px;
-    background-color: purple; /* Fallback/default color */
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 50%; /* Default to circle for basic_glob */
-    z-index: 5; /* Base z-index for monsters */
-    transition: left 0.1s linear, top 0.1s linear;
+    /* width & height for the container div are set by JS in Monster.createElement */
+    /* background-color: transparent; /* Container is transparent */
+    /* border-radius: 0; /* Container has no border/shape of its own */
+    z-index: 5;
+    transition: left 0.1s linear, top 0.1s linear; /* For smooth movement */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center; /* Center image if health bar is absolute positioned */
 }
 
-/* Specific monster type styling */
-.monster.fast_pita {
-    width: 40px; /* wider */
-    height: 25px; /* flatter */
-    border-radius: 40% / 50%; /* elliptical */
-    /* background-color is set by JS using stats.color ('sandybrown') */
+.monster-image {
+    width: 100%; /* Image fills the container's width */
+    height: 100%; /* Image fills the container's height */
+    object-fit: contain; /* Scales image down, maintains aspect ratio */
+    display: block;
 }
-/* .monster.basic_glob will use the default .monster styles for shape/size */
+
+/* Remove old monster type specific shape/color styling */
+/* .monster.fast_pita { ... } */
+/* .monster.basic_glob { ... } */ /* JS doesn't set these classes for shape anymore */
 
 
 .monster-health-bar-container {
-    width: 80%;
-    height: 5px;
-    background-color: #555; /* Dark background for the bar */
-    border: 1px solid #333;
-    border-radius: 2px;
-    overflow: hidden; /* To make inner bar conform to border-radius */
-    margin-bottom: 2px; /* Space from monster bottom */
+    width: 90%; /* Relative to monster div width */
+    height: 7px;
+    background-color: rgba(50, 50, 50, 0.7);
+    border: 1px solid #111;
+    border-radius: 3px;
+    overflow: hidden;
+    position: absolute;
+    bottom: -10px; /* Position below the monster image container */
+    left: 5%; /* Center it */
 }
 
 .monster-health-bar {
-    width: 100%; /* Full health */
+    width: 100%;
     height: 100%;
-    background-color: red; /* Health color */
-    transition: width 0.1s linear; /* Smooth health change */
+    background-color: #ff4136; /* A bright red */
+    transition: width 0.1s linear;
 }
 
 /* Game Message Overlay */
@@ -235,29 +224,78 @@ header div, header button {
 }
 
 .projectile {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    z-index: 6; /* Above monsters (z-index 5), below impact effects */
-    /* background-color is set by JS */
+    position: absolute; /* This is the container for the projectile's <img> */
+    /* width & height set by JS (e.g., 15x15px) */
+    z-index: 6;
+    /* background-color: transparent; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.projectile img { /* The actual image for the projectile */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
-.projectile.splash-projectile {
-    /* background-color is orangered by default from spicy_falafel stats.color */
-    /* Can add specific overrides here if needed, e.g. a border */
-    /* border: 1px solid darkred; */
-}
+/* .projectile.splash-projectile { ... } // Not needed if images are distinct */
 
-.impact-effect {
+.impact-effect { /* This is an <img> tag */
     position: absolute;
-    width: 15px; /* Initial size, might be controlled by JS if varies */
-    height: 15px;
-    /* background-color is set by JS (can be projectile color or fixed yellow) */
-    border-radius: 50%;
-    transform: scale(1); /* Initial scale before animation */
-    opacity: 0.8; /* Initial opacity before fade */
+    /* width & height set by JS (e.g., 20x20px) */
+    transform: scale(1);
+    opacity: 0.8;
     transition: transform 0.2s ease-out, opacity 0.2s ease-out;
-    z-index: 15; /* Above projectiles and monsters */
-    pointer-events: none; /* So it doesn't interfere with clicks */
+    z-index: 15;
+    pointer-events: none;
+}
+
+.cell-slow-puddle {
+    /* Uses --puddle-color set by JS for dynamic puddle colors if needed */
+    background-color: var(--puddle-color, rgba(255, 165, 0, 0.3)) !important; /* Use important to override other cell backgrounds if needed */
+    /* transition: background-color 0.3s ease-out; /* Might be too quick/distracting */
+}
+
+#sound-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Or other suitable location */
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.7);
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 150; /* Ensure it's above game messages if they are full screen */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#sound-controls button {
+    margin-right: 8px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1.2em; /* Make emoji slightly larger */
+    border-radius: 5px;
+}
+#sound-controls button:hover {
+    background-color: #e0e0e0;
+}
+#sound-controls input[type="range"] {
+    cursor: pointer;
+}
+
+.coin-gain-animation {
+    position: absolute;
+    font-size: 1.2em; /* Adjust as needed */
+    font-weight: bold;
+    color: gold;
+    text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000; /* Creates a black outline */
+    opacity: 1;
+    transition: transform 1s ease-out, opacity 1s ease-out;
+    z-index: 20; /* Above most other game elements */
+    pointer-events: none;
 }

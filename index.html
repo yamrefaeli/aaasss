@@ -11,15 +11,17 @@
         <div id="coins-display">מטבעות: 0</div>
         <div id="wave-display">גל: 1</div>
         <div id="base-health-display">חיים: 100</div>
-        <button id="pause-button">השהה</button>
+        <button id="pause-button" class="game-button">השהה</button>
     </header>
 
     <div class="game-container">
         <aside id="protector-panel">
             <h2>בחר מגן</h2>
-            <div class="protector-option" data-type="regular_falafel">כדור פלאפל רגיל</div>
-            <div class="protector-option" data-type="spicy_falafel">פלאפל חריף</div> <!-- Will be updated by JS -->
-            <div class="protector-option" data-type="tahini_tower">מגדל טחינה</div>
+            <div class="protector-option" data-type="regular_falafel" data-tooltip="יורה כדורי פלאפל בודדים. זול ויעיל נגד מטרות בודדות."></div>
+            <div class="protector-option" data-type="spicy_falafel" data-tooltip="פלאפל חריף אש! גורם נזק רסס באזור קטן. מעולה נגד קבוצות."></div>
+            <div class="protector-option" data-type="tahini_tower" data-tooltip="מתיז טחינה שמאטה מפלצות באזור. אינו גורם נזק רב אך מעכב אותן."></div>
+            <div class="protector-option" data-type="chickpea_plant" data-tooltip="שתיל חומוס חמוד שמייצר מטבעות נוספים לאורך זמן. אינו תוקף."></div>
+            <div class="protector-option" data-type="pickle_wall" data-tooltip="קיר חמוצים קשוח! בעל חיים רבים וחוסם מפלצות ביעילות. אינו תוקף."></div>
         </aside>
         <main id="game-area">
             <div id="game-board">
@@ -28,6 +30,11 @@
         </main>
     </div>
     <div id="game-message" style="display: none;"></div>
+
+    <div id="sound-controls">
+        <button id="mute-button" class="game-button">🔊</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5">
+    </div>
 
     <script src="js/game.js" defer></script>
 </body>
